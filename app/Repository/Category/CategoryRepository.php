@@ -14,8 +14,8 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function getAllCategories()
     {
-        $sections = CategoryResource::collection(Category::where('status','0')->get());
-        return $this->apiResponse($sections, "جميع التصنيفات", 200);
+        $categories = CategoryResource::collection(Category::where('status','0')->get());
+        return $this->apiResponse($categories, "جميع التصنيفات", 200);
     }
 
     public function showCategories($id)
