@@ -17,7 +17,7 @@ class CartController extends Controller
     {
         // auth user
         $this->validate($request, [
-            'quantityCount' => 'required',
+            'quantity_count' => 'required',
             'size_id' => 'nullable',
         ]);
         try {
@@ -36,14 +36,14 @@ class CartController extends Controller
                             return $this->apiResponse([], "تم طلب هذا المنتج مسبقاً", 400);
                         } else {
                             if ($productSize->quantity > 0) {
-                                if ($productSize->quantity >= $request->quantityCount) {
+                                if ($productSize->quantity >= $request->quantity_count) {
                                     Cart::create([
                                         'user_id' => $user_id,
                                         'product_id' => $product_id,
                                         'product_size_id' => $request->size_id,
-                                        'quantity' => $request->quantityCount,
+                                        'quantity' => $request->quantity_count,
                                     ]);
-                                    return $this->apiResponse(['ok'], "تم طلب المنتج بنجاح", 400);
+                                    return $this->apiResponse(['ok'], "تم طلب المنتج بنجاح", 200);
                                 } else {
                                     return $this->apiResponse([], "الكمية المتوفرة '$productSize->quantity' فقط", 400);
                                 }
@@ -62,14 +62,14 @@ class CartController extends Controller
                             ->exists()) {
                             return $this->apiResponse([], "تم طلب هذا المنتج مسبقاً", 400);
                         } else {
-                            if ($product->quantity > $request->quantityCount) {
+                            if ($product->quantity > $request->quantity_count) {
                                 Cart::create([
                                     'user_id' => $user_id,
                                     'product_id' => $product_id,
                                     'product_size_id' => $request->size_id,
-                                    'quantity' => $request->quantityCount,
+                                    'quantity' => $request->quantity_count,
                                 ]);
-                                return $this->apiResponse(['ok'], "تم طلب المنتج بنجاح", 400);
+                                return $this->apiResponse(['ok'], "تم طلب المنتج بنجاح", 200);
                             } else {
                                 return $this->apiResponse([], "الكمية المتوفرة '$product->quantity' فقط", 400);
                             }
@@ -88,7 +88,7 @@ class CartController extends Controller
     public function checkCartCount()
     {
         $cartCount = Cart::where('user_id', auth()->user()->id)->count();
-        return $this->apiResponse($cartCount, "مجموع الطلبات في السلة", 400);
+        return $this->apiResponse($cartCount, "مجموع الطلبات في السلة", 200);
     }
 
     public function cartShow()
@@ -96,9 +96,11 @@ class CartController extends Controller
         $carts = Cart::where('user_id', auth()->user()->id)->get();
         $cartsCollection = collect($carts)->map(function ($item) {
             $productSize = '';
+            $productSizeQuantity = '';
             if ($item->productSize) {
-                if ($item->productSize->size) {
-                    $productSize = $item->productSize->size->name;
+                $productSizeQuantity = $item->productSize->where('product_id', $item->product_id)->where('size_id', $item->product_size_id)->first()->quantity;
+                if ($item->productSize->where('product_id', $item->product_id)->where('size_id', $item->product_size_id)->first()->size) {
+                    $productSize = $item->productSize->where('product_id', $item->product_id)->where('size_id', $item->product_size_id)->first()->size->name;
                 }
             }
             $productImage = '';
@@ -106,15 +108,27 @@ class CartController extends Controller
                 $productImage = $item->product->productImages[0]->image;
             }
             return [
-                'id' => $item->product->id,
+                'cart_id' => $item->id,
+                'product_id' => $item->product->id,
                 'name' => $item->product->name,
                 'image' => $productImage,
                 'price' => $item->product->selling_price,
                 'size' => $productSize,
                 'quantity' => $item->quantity,
-
+                'available_quantity' => $productSizeQuantity,
             ];
         });
         return $this->apiResponse($cartsCollection->all(), "بيانات السلة", 200);
+    }
+
+    public function destroy($cart_id)
+    {
+        $cartRemoveData = Cart::where('user_id', auth()->user()->id)->where('id',$cart_id)->first();
+        if($cartRemoveData){
+            $cartRemoveData->delete();
+            return $this->checkCartCount();
+        }else{
+            return $this->apiResponse([], "يوجد مشكلة", 201);
+        }
     }
 }

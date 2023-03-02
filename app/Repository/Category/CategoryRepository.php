@@ -46,9 +46,15 @@ class CategoryRepository implements CategoryRepositoryInterface
         try {
 
             if ($search !== "") {
-                $result = Product::where('category_id', $id)->where(function ($query) use ($search) {
-                    $query->where('name', 'like', '%' . $search . '%');
-                })->with(['productImages:id,image,product_id'])->orderBy('id', 'ASC')->paginate(5, ['id', 'name', 'small_description', 'original_price', 'selling_price']);
+                if($id == 0){
+                    $result = Product::where(function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    })->with(['productImages:id,image,product_id'])->orderBy('id', 'ASC')->paginate(5, ['id', 'name', 'small_description', 'original_price', 'selling_price']);
+                }else{
+                    $result = Product::where('category_id', $id)->where(function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    })->with(['productImages:id,image,product_id'])->orderBy('id', 'ASC')->paginate(5, ['id', 'name', 'small_description', 'original_price', 'selling_price']);
+                }
                 if(!empty($result->items())){
                     return $this->apiResponse($result, 'جميع المنتجات', 200);
                 }else{

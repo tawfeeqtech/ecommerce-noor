@@ -27,9 +27,10 @@ Route::post('register', [PassportAuthController::class, 'register']);
 Route::post('login', [PassportAuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('/cart-count', [CartController::class, 'checkCartCount'])->name('cart-count');
+    Route::get('/cart-count', [CartController::class, 'checkCartCount']);
     Route::post('/cart/{product_id}', [CartController::class, 'addToCart']);
-    Route::get('/view-cart', [CartController::class, 'cartShow'])->name('view-cart');
+    Route::get('/view-cart', [CartController::class, 'cartShow']);
+    Route::delete('/cart/{cart_id}', [CartController::class, 'destroy']);
 });
 
 
