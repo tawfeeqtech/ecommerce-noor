@@ -54,7 +54,7 @@ class ProductController extends Controller
 
             return $this->apiResponse($result, "بيانات المنتج", 200);
         } catch (\Exception $e) {
-            return $this->apiResponse([], $e->getMessage(), 400);
+            return $this->apiResponse(null, $e->getMessage(), 400);
         }
     }
 }

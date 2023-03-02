@@ -22,7 +22,7 @@ class CartController extends Controller
         ]);
         try {
             if (Product::whereId($product_id)->doesntExist()) {
-                return $this->apiResponse([], "هذا المنتج غير موجود", 400);
+                return $this->apiResponse(null, "هذا المنتج غير موجود", 400);
             } else {
                 $user_id = auth()->user()->id;
                 $product = Product::whereId($product_id)->first();
@@ -33,7 +33,7 @@ class CartController extends Controller
                             ->where('product_id', $product_id)
                             ->where('product_size_id', $request->size_id)
                             ->exists()) {
-                            return $this->apiResponse([], "تم طلب هذا المنتج مسبقاً", 400);
+                            return $this->apiResponse(null, "تم طلب هذا المنتج مسبقاً", 400);
                         } else {
                             if ($productSize->quantity > 0) {
                                 if ($productSize->quantity >= $request->quantity_count) {
@@ -45,22 +45,22 @@ class CartController extends Controller
                                     ]);
                                     return $this->apiResponse(['ok'], "تم طلب المنتج بنجاح", 200);
                                 } else {
-                                    return $this->apiResponse([], "الكمية المتوفرة '$productSize->quantity' فقط", 400);
+                                    return $this->apiResponse(null, "الكمية المتوفرة '$productSize->quantity' فقط", 400);
                                 }
                             } else {
-                                return $this->apiResponse([], "الكمية من هذا الحجم غير متوفرة", 400);
+                                return $this->apiResponse(null, "الكمية من هذا الحجم غير متوفرة", 400);
                             }
                         }
 
                     } else {
-                        return $this->apiResponse([], "هذا الحجم غير موجود", 400);
+                        return $this->apiResponse(null, "هذا الحجم غير موجود", 400);
                     }
                 } else {
                     if ($product->quantity > 0) {
                         if (Cart::where('user_id', $user_id)
                             ->where('product_id', $product_id)
                             ->exists()) {
-                            return $this->apiResponse([], "تم طلب هذا المنتج مسبقاً", 400);
+                            return $this->apiResponse(null, "تم طلب هذا المنتج مسبقاً", 400);
                         } else {
                             if ($product->quantity > $request->quantity_count) {
                                 Cart::create([
@@ -71,17 +71,17 @@ class CartController extends Controller
                                 ]);
                                 return $this->apiResponse(['ok'], "تم طلب المنتج بنجاح", 200);
                             } else {
-                                return $this->apiResponse([], "الكمية المتوفرة '$product->quantity' فقط", 400);
+                                return $this->apiResponse(null, "الكمية المتوفرة '$product->quantity' فقط", 400);
                             }
                         }
 
                     } else {
-                        return $this->apiResponse([], "الكمية غير متوفرة", 400);
+                        return $this->apiResponse(null, "الكمية غير متوفرة", 400);
                     }
                 }
             }
         } catch (\Exception $e) {
-            return $this->apiResponse([], $e->getMessage(), 400);
+            return $this->apiResponse(null, $e->getMessage(), 400);
         }
     }
 
@@ -128,7 +128,7 @@ class CartController extends Controller
             $cartRemoveData->delete();
             return $this->checkCartCount();
         }else{
-            return $this->apiResponse([], "يوجد مشكلة", 201);
+            return $this->apiResponse(null, "يوجد مشكلة", 201);
         }
     }
 }

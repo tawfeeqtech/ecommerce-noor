@@ -35,7 +35,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             if ($result->total() > 0) {
                 return $this->apiResponse($result, 'جميع المنتجات', 200);
             }
-            return $this->apiResponse([], "لا يوجد منتجات", 200);
+            return $this->apiResponse(null, "لا يوجد منتجات", 201);
         } catch (\Exception $e) {
             return $this->apiResponse(null, $e->getMessage(), 400);
         }
@@ -44,7 +44,6 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function searchProduct($id,$search)
     {
         try {
-
             if ($search !== "") {
                 if($id == 0){
                     $result = Product::where(function ($query) use ($search) {
@@ -58,12 +57,13 @@ class CategoryRepository implements CategoryRepositoryInterface
                 if(!empty($result->items())){
                     return $this->apiResponse($result, 'جميع المنتجات', 200);
                 }else{
-                    return $this->apiResponse([], 'جميع المنتجات', 200);
+                    return $this->apiResponse(null, 'لا يوجد منتجات', 200);
                 }
+            }else{
+                return $this->apiResponse(null, "يجب ادخال كلمة للبحث", 400);
             }
-            return $this->apiResponse([], "error", 400);
         }catch (\Exception $e) {
-            return $this->apiResponse([], $e->getMessage(), 400);
+            return $this->apiResponse(null, $e->getMessage(), 400);
         }
 
     }
