@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\PassportAuthController;
 use Illuminate\Http\Request;
@@ -31,6 +32,10 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/cart/{product_id}', [CartController::class, 'addToCart']);
     Route::get('/view-cart', [CartController::class, 'cartShow']);
     Route::delete('/cart/{cart_id}', [CartController::class, 'destroy']);
+
+    Route::get('/checkout', [CheckoutController::class, 'index']);
+    Route::post('/checkout', [CheckoutController::class, 'store']);
+
 });
 
 
