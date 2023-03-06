@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class PassportAuthController extends Controller
@@ -17,20 +18,24 @@ class PassportAuthController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|min:4',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
+            'phone' => 'nullable',
+            'address' => 'nullable',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
             'role_as' => 2,
             'password' => bcrypt($request->password)
         ]);
 
-        $token = $user->createToken('LaravelAuthApp')->accessToken;
-
-        return response()->json(['token' => $token], 200);
+//        $token =
+        $user['token'] = $user->createToken('LaravelAuthApp')->accessToken;
+        return response()->json($user, 200);
     }
 
     /**
@@ -52,8 +57,15 @@ class PassportAuthController extends Controller
         ];
 
         if (auth()->attempt($data)) {
-            $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;
-            return response()->json(['token' => $token], 200);
+            $user = Auth::user();
+            $success['id'] =  $user->id;
+            $success['name'] =  $user->name;
+            $success['address'] =  $user->address;
+            $success['phone'] =  $user->phone;
+            $success['token'] =  $user->createToken('MyApp')->accessToken;
+
+//            $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;
+            return response()->json($success, 200);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }

@@ -17,13 +17,16 @@ class CheckoutController extends Controller
     public function index()
     {
         $carts = Cart::where('user_id',auth()->user()->id)->get();
-
-        foreach ($carts as $cartItem){
-            $this->totalProductAmount += $cartItem->product->selling_price * $cartItem->quantity;
+        if($carts->first() != null){
+            foreach ($carts as $cartItem){
+                $this->totalProductAmount += $cartItem->product->selling_price * $cartItem->quantity;
+            }
+            $data['carts'] = $carts;
+            $data['totalProductAmount'] = $this->totalProductAmount;
+            return $this->apiResponse($data, "بيانات السلة", 200);
+        }else{
+            return $this->apiResponse(null, "السلة فارغة", 400);
         }
-        $data['carts'] = $carts;
-        $data['totalProductAmount'] = $this->totalProductAmount;
-        return $this->apiResponse($data, "بيانات السلة", 200);
     }
     function placeOrder($request)
     {
@@ -66,12 +69,11 @@ class CheckoutController extends Controller
                 ]);
 
                 if($cartItem->product_size_id != null){
-                    $cartItem->productSize()->where('id',$cartItem->product_size_id)->decrement('quantity',$cartItem->quantity);
+                    $cartItem->productSize->where('product_id',$cartItem->product_id)->where('size_id',$cartItem->product_size_id)->decrement('quantity',$cartItem->quantity);
                     $cartItem->product->where('id',$cartItem->product_id)->decrement('quantity',$cartItem->quantity);
                 }
                 else{
-                    $cartItem->product()->where('id',$cartItem->product_id)->decrement('quantity',$cartItem->quantity);
-
+                    $cartItem->product->where('id',$cartItem->product_id)->decrement('quantity',$cartItem->quantity);
                 }
             }
             if($order){

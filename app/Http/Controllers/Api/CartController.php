@@ -43,7 +43,7 @@ class CartController extends Controller
                                         'product_size_id' => $request->size_id,
                                         'quantity' => $request->quantity_count,
                                     ]);
-                                    return $this->apiResponse(['ok'], "تم طلب المنتج بنجاح", 200);
+                                    return $this->apiResponse('ok', "تم طلب المنتج بنجاح", 200);
                                 } else {
                                     return $this->apiResponse(null, "الكمية المتوفرة '$productSize->quantity' فقط", 400);
                                 }
@@ -69,7 +69,7 @@ class CartController extends Controller
                                     'product_size_id' => $request->size_id,
                                     'quantity' => $request->quantity_count,
                                 ]);
-                                return $this->apiResponse(['ok'], "تم طلب المنتج بنجاح", 200);
+                                return $this->apiResponse('ok', "تم طلب المنتج بنجاح", 200);
                             } else {
                                 return $this->apiResponse(null, "الكمية المتوفرة '$product->quantity' فقط", 400);
                             }
