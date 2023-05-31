@@ -29,11 +29,12 @@ class FrontendController extends Controller
             return view('frontend.collections.products.index', [
                 // 'entities' => $entities,
                 'category' => $category
+                
             ]);
         }else{
             return redirect()->back();
         }
     }
 
-    
+
 }
