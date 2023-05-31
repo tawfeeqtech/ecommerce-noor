@@ -1,17 +1,23 @@
 <?php
-namespace App\Http\Controllers;
-use Illuminate\Http\JsonResponse;
+namespace App\Http\Controllers\Api;
+use App\Http\Controllers\Controller;
+
+use Illuminate\Contracts\Routing\ResponseFactory;
+//use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class PassportAuthController extends Controller
 {
+    use ApiResponseTrait;
+
     /**
      * Registration
      * @param Request $request
-     * @return JsonResponse
+     * @return ResponseFactory|Response
      * @throws ValidationException
      */
     public function register(Request $request)
@@ -35,13 +41,15 @@ class PassportAuthController extends Controller
 
 //        $token =
         $user['token'] = $user->createToken('LaravelAuthApp')->accessToken;
-        return response()->json($user, 200);
+        return $this->apiResponse($user, "بيانات المستخدم", 200);
+
+//        return response()->json($user, 200);
     }
 
     /**
      * Login
      * @param Request $request
-     * @return JsonResponse
+     * @return ResponseFactory|Response
      * @throws ValidationException
      */
     public function login(Request $request)
@@ -65,9 +73,34 @@ class PassportAuthController extends Controller
             $success['token'] =  $user->createToken('MyApp')->accessToken;
 
 //            $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;
-            return response()->json($success, 200);
+            return $this->apiResponse($success, "تم تسجيل الدخول بنجاح", 200);
+
+//            return response()->json($success, 200);
         } else {
-            return response()->json(['error' => 'Unauthorised'], 401);
+            return $this->apiResponse(null, "غير مصرح", 200);
+
+//            return response()->json(['error' => 'Unauthorised'], 401);
+        }
+    }
+
+    public function logout()
+    {
+        if (Auth::check()) {
+
+            $user = Auth::user()->token();
+//            $tokens =  $user->tokens;
+
+
+//            dd($tokens);
+
+            $user->revoke();
+            return $this->apiResponse(null, "تم تسجيل الخروج بنجاح", 200);
+
+//            return response()->json('logged out', 200);
+        }
+        else{
+            return $this->apiResponse(null, "يجب تسجيل الدخول", 200);
+
         }
     }
 }

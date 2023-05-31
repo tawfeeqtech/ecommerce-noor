@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\PassportAuthController;
+use App\Http\Controllers\Api\PassportAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,7 +35,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/checkout', [CheckoutController::class, 'index']);
     Route::post('/checkout', [CheckoutController::class, 'store']);
-
+    Route::get('logout', [PassportAuthController::class, 'logout']);
 });
 
 
