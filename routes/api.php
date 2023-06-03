@@ -3,8 +3,10 @@
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CheckoutController;
+use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\PassportAuthController;
+use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,18 +26,39 @@ Route::get('/categories/search/{id}/{search}', [CategoryController::class, 'sear
 
 Route::get('/products/{id}', [ProductController::class, 'show']);
 
-Route::post('register', [PassportAuthController::class, 'register']);
-Route::post('login', [PassportAuthController::class, 'login']);
+Route::controller(PassportAuthController::class)->group(function () {
+    Route::post('register', 'register');
+    Route::post('login', 'login');
+});
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('/cart-count', [CartController::class, 'checkCartCount']);
-    Route::post('/cart/{product_id}', [CartController::class, 'addToCart']);
-    Route::get('/view-cart', [CartController::class, 'cartShow']);
-    Route::delete('/cart/{cart_id}', [CartController::class, 'destroy']);
 
-    Route::get('/checkout', [CheckoutController::class, 'index']);
-    Route::post('/checkout', [CheckoutController::class, 'store']);
-    Route::get('logout', [PassportAuthController::class, 'logout']);
+    Route::controller(CartController::class)->group(function () {
+        Route::get('/cart-count','checkCartCount');
+        Route::post('/cart/{product_id}','addToCart');
+        Route::get('/view-cart','cartShow');
+        Route::delete('/cart/{cart_id}','destroy');
+    });
+
+
+    Route::controller(CheckoutController::class)->group(function () {
+        Route::get('/checkout', 'index');
+        Route::post('/checkout', 'store');
+    });
+
+    Route::prefix('profile')->controller(ProfileController::class)->group(function () {
+        Route::get('view', 'show');
+        Route::put('update', [ProfileController::class, 'update']);
+        Route::get('logout', 'logout');
+    });
+
+    Route::prefix('favorites')->controller(FavoriteController::class)->group(function () {
+        Route::post('/', 'index');
+        Route::post('/add-to-favorite', 'store');
+        Route::delete('/remove/{product}', 'destroy');
+
+    });
+
 });
 
 

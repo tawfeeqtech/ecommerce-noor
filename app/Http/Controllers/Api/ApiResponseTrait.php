@@ -13,4 +13,13 @@ trait ApiResponseTrait
         ];
         return response($array,$status);
     }
+
+    public function uploadImage($uploadPath,$request)
+    {
+        $file = $request->file('photo');
+        $filename = time() . '.' . $file->extension();
+        $file->move(public_path($uploadPath), $filename);
+
+        return $uploadPath . $filename;
+    }
 }

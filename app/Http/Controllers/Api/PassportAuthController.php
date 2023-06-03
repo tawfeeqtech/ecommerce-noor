@@ -1,13 +1,15 @@
 <?php
+
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
 
 use Illuminate\Contracts\Routing\ResponseFactory;
-//use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class PassportAuthController extends Controller
@@ -22,85 +24,94 @@ class PassportAuthController extends Controller
      */
     public function register(Request $request)
     {
-        $this->validate($request, [
+        /*$validatedData = $request->validate([
             'name' => 'required|min:4',
-            'email' => 'required|email|unique:users',
+            'email' => 'nullable|email',
             'password' => 'required|min:8',
-            'phone' => 'nullable',
+            'phone' => 'required|unique:users,phone',
             'address' => 'nullable',
+            'img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);*/
+
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:4',
+            'email' => 'nullable|email',
+            'password' => 'required|min:8',
+            'phone' => 'required|unique:users,phone',
+            'address' => 'nullable',
+            'img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $user = User::create([
+        if ($validator->fails()) {
+            return $this->apiResponse($validator->errors(),'errors', 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        if ($request->hasfile('photo')) {
+            /*$profilePicturePath = $request->file('photo')->store('profile_pictures');
+            $validatedData['img'] = $profilePicturePath;*/
+
+            $uploadPath = 'uploads/profile_pictures/';
+
+            /*$file = $request->file('photo');
+
+            $filename = time() . '.' . $file->extension();
+
+
+            $file->move(public_path($uploadPath), $filename);
+
+            $finalImagePathName = $uploadPath . $filename;*/
+
+            $validatedData['img'] = $this->uploadImage($uploadPath,$request);
+        }
+
+        $validatedData['role_as'] = 2;
+        $validatedData['password'] = bcrypt($validatedData['password']);
+        /*$user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
             'role_as' => 2,
             'password' => bcrypt($request->password)
-        ]);
+        ]);*/
+        $user = User::create($validatedData);
 
-//        $token =
         $user['token'] = $user->createToken('LaravelAuthApp')->accessToken;
-        return $this->apiResponse($user, "بيانات المستخدم", 200);
-
-//        return response()->json($user, 200);
+        return $this->apiResponse($user, "بيانات المستخدم", 201);
     }
 
     /**
      * Login
      * @param Request $request
      * @return ResponseFactory|Response
-     * @throws ValidationException
      */
     public function login(Request $request)
     {
-        $this->validate($request, [
-            'email' => 'required',
+        $validatedData = $request->validate([
+            'phone' => 'required',
             'password' => 'required',
         ]);
 
         $data = [
-            'email' => $request->email,
-            'password' => $request->password
+            'phone' => $validatedData['phone'],
+            'password' => $validatedData['password']
         ];
-
         if (auth()->attempt($data)) {
             $user = Auth::user();
-            $success['id'] =  $user->id;
-            $success['name'] =  $user->name;
+            $success['id'] = $user->id;
+            /*$success['name'] =  $user->name;
             $success['address'] =  $user->address;
             $success['phone'] =  $user->phone;
-            $success['token'] =  $user->createToken('MyApp')->accessToken;
-
-//            $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;
+            $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;*/
+            $success['token'] = $user->createToken('MyApp')->accessToken;
             return $this->apiResponse($success, "تم تسجيل الدخول بنجاح", 200);
-
-//            return response()->json($success, 200);
         } else {
-            return $this->apiResponse(null, "غير مصرح", 200);
-
-//            return response()->json(['error' => 'Unauthorised'], 401);
+            return $this->apiResponse(null, "غير مصرح", 401);
         }
     }
 
-    public function logout()
-    {
-        if (Auth::check()) {
 
-            $user = Auth::user()->token();
-//            $tokens =  $user->tokens;
-
-
-//            dd($tokens);
-
-            $user->revoke();
-            return $this->apiResponse(null, "تم تسجيل الخروج بنجاح", 200);
-
-//            return response()->json('logged out', 200);
-        }
-        else{
-            return $this->apiResponse(null, "يجب تسجيل الدخول", 200);
-
-        }
-    }
 }
