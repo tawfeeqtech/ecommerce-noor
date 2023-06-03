@@ -45,7 +45,7 @@ class CartController extends Controller
                                     ]);
                                     return $this->apiResponse('ok', "تم طلب المنتج بنجاح", 200);
                                 } else {
-                                    return $this->apiResponse(null, "الكمية المتوفرة '$productSize->quantity' فقط", 400);
+                                    return $this->apiResponse(null, "الكمية المتوفرة لهذا المنتج '$productSize->quantity' فقط", 400);
                                 }
                             } else {
                                 return $this->apiResponse(null, "الكمية من هذا الحجم غير متوفرة", 400);

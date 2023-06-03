@@ -33,21 +33,22 @@ Route::controller(PassportAuthController::class)->group(function () {
 
 Route::middleware('auth:api')->group(function () {
 
-    Route::controller(CartController::class)->group(function () {
-        Route::get('/cart-count','checkCartCount');
-        Route::post('/cart/{product_id}','addToCart');
-        Route::get('/view-cart','cartShow');
-        Route::delete('/cart/{cart_id}','destroy');
+//    Route::controller(CartController::class)->group(function () {
+    Route::prefix('cart')->controller(CartController::class)->group(function () {
+        Route::get('/','cartShow');
+        Route::get('/count','checkCartCount');
+        Route::post('/{product_id}','addToCart');
+        Route::delete('/{cart_id}','destroy');
     });
 
 
-    Route::controller(CheckoutController::class)->group(function () {
-        Route::get('/checkout', 'index');
-        Route::post('/checkout', 'store');
+    Route::prefix('checkout')->controller(CheckoutController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
     });
 
     Route::prefix('profile')->controller(ProfileController::class)->group(function () {
-        Route::get('view', 'show');
+        Route::get('/', 'show');
         Route::put('update', [ProfileController::class, 'update']);
         Route::get('logout', 'logout');
     });
@@ -56,7 +57,6 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/', 'index');
         Route::post('/add-to-favorite', 'store');
         Route::delete('/remove/{product}', 'destroy');
-
     });
 
 });
