@@ -30,8 +30,11 @@ use App\Http\Livewire\Admin\Brand\Index;
 
 Route::controller(FrontendController::class)->group(function () {
     Route::get('/', 'index');
-    Route::get('/collections', 'categories')->name('collections');
-    Route::get('/collections/{category_slug}', 'products')->name('products');
+    Route::prefix('collections')->group(function () {
+        Route::get('/', 'categories')->name('collections');
+        Route::get('/{category_slug}', 'products')->name('products');
+        Route::get('/{category_slug}/{product_slug}', 'productView')->name('productView');
+    });
 });
 
 Auth::routes();
