@@ -23,7 +23,7 @@ class CategorySeeder extends Seeder
             ['name'=>'jalabiyas','slug'=>'jalabiyas'],
             ['name'=>'jeans','slug'=>'jeans'],
             ['name'=>'sets','slug'=>'sets'],
-            ['name'=>'shirts','slug'=>'shirts']
+            ['name'=>'Skirts','slug'=>'Skirts']
         ];
         Category::insert($createMultipleCategories);
         //User::create($arr);

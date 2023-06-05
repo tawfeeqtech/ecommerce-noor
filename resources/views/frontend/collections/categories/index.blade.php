@@ -13,7 +13,7 @@
                 <div class="category-card">
                     <a href="{{route('products',$item->slug)}}">
                         <div class="category-card-img">
-                            <img src="{{asset($item->image)}}" class="w-100" alt="Laptop">
+                            <img src="{{asset($item->image)}}" class="w-100" alt="{{$item->slug}}">
                         </div>
                         <div class="category-card-body">
                             <h5>{{$item->name}}</h5>

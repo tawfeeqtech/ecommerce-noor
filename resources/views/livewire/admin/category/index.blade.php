@@ -67,9 +67,9 @@
                                     <td>{{$entity->name}}</td>
                                     <td>
                                         @if ($entity->status == '1')
-                                            <span class="p-2 bg-success badge text-white rounded-pill"> Visible </span>
-                                        @else
                                             <span class="p-2 bg-danger badge text-white rounded-pill"> Hidden</span>
+                                        @else
+                                            <span class="p-2 bg-success badge text-white rounded-pill"> Visible </span>
                                         @endif
                                     </td>
                                     <td>

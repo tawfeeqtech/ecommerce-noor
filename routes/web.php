@@ -28,10 +28,11 @@ use App\Http\Livewire\Admin\Brand\Index;
 //     return view('welcome');
 // });
 
-Route::get('/', [FrontendController::class, 'index']);
-Route::get('/collections', [FrontendController::class, 'categories'])->name('collections');
-Route::get('/collections/{category_slug}', [FrontendController::class, 'products'])->name('products');
-
+Route::controller(FrontendController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/collections', 'categories')->name('collections');
+    Route::get('/collections/{category_slug}', 'products')->name('products');
+});
 
 Auth::routes();
 
@@ -49,12 +50,14 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
     Route::resource('sizes', SizeController::class);
     Route::resource('sliders', SliderController::class);
 
-    Route::get('/product/{product_image_id}/delete', [ProductController::class, 'destroyImage'])->name('products.removeImage');
-    Route::post('/products/product-color/{prod_color_id}', [ProductController::class, 'updateProdColorQty'])->name('products.updateProdColorQty');
-    Route::get('/products/product-color/{prod_color_id}/delete', [ProductController::class, 'deleteProdColorQty'])->name('products.deleteProdColorQty');
+    Route::prefix('products')->controller(ProductController::class)->group(function () {
+        Route::get('/{product_image_id}/delete', 'destroyImage')->name('products.removeImage');
+        Route::post('/product-color/{prod_color_id}', 'updateProdColorQty')->name('products.updateProdColorQty');
+        Route::get('/product-color/{prod_color_id}/delete', 'deleteProdColorQty')->name('products.deleteProdColorQty');
 
-    Route::post('/products/product-size/{prod_size_id}', [ProductController::class, 'updateProdSizeQty'])->name('products.updateProdSizeQty');
-    Route::get('/products/product-size/{prod_size_id}/delete', [ProductController::class, 'deleteProdSizeQty'])->name('products.deleteProdSizeQty');
+        Route::post('/product-size/{prod_size_id}', 'updateProdSizeQty')->name('products.updateProdSizeQty');
+        Route::get('/product-size/{prod_size_id}/delete', 'deleteProdSizeQty')->name('products.deleteProdSizeQty');
+    });
 
     //Route::get('/brands', App\Http\Livewire\Admin\Brand\Index::class);
     Route::get('/brand', Index::class)->name('brand.index');
