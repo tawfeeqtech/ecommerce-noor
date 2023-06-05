@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Frontend\WishlistController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,6 +37,14 @@ Route::controller(FrontendController::class)->group(function () {
         Route::get('/{category_slug}/{product_slug}', 'productView')->name('productView');
     });
 });
+
+Route::middleware(['auth'])->prefix('wishlist')->controller(WishlistController::class)->group(function () {
+    Route::get('/', 'index')->name('wishlist');
+
+});
+
+
+
 
 Auth::routes();
 

@@ -30,6 +30,8 @@ class View extends Component
                     'user_id' => $user_id,
                     'product_id' => $productId
                 ]);
+                $this->emit('wishListAddedUpdated');
+
                 /*session()->flash('message','Wishlist Added Successfully');
                 session()->flash('alert-class', 'alert-success');*/
                 $this->dispatchBrowserEvent('message', [
