@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\WishlistController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -38,9 +39,15 @@ Route::controller(FrontendController::class)->group(function () {
     });
 });
 
-Route::middleware(['auth'])->prefix('wishlist')->controller(WishlistController::class)->group(function () {
-    Route::get('/', 'index')->name('wishlist');
+Route::middleware(['auth'])->group(function () {
 
+    Route::prefix('wishlist')->controller(WishlistController::class)->group(function () {
+        Route::get('/', 'index')->name('wishlist');
+    });
+
+    Route::prefix('cart')->controller(CartController::class)->group(function () {
+        Route::get('/', 'index')->name('cart');
+    });
 });
 
 

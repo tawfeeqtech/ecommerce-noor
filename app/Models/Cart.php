@@ -21,6 +21,11 @@ class Cart extends Model
         return $this->belongsTo(Product::class,'product_id','id');
     }
 
+    public function productColor()
+    {
+        return $this->belongsTo(ProductColor::class,'product_color_id','id');
+    }
+
     public function productSize()
     {
         return $this->belongsTo(ProductSize::class,'product_size_id','id');

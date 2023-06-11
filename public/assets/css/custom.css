@@ -1,3 +1,8 @@
+.attribute {
+    display: inline-block;
+    margin-left: 10px;
+}
+
 /* Cart or Wishlist */
 .shopping-cart .cart-header{
     padding: 10px;

@@ -27,7 +27,7 @@
                                         <div class="col-md-6 my-auto">
                                             <a href="{{url('/collections/'.$wishlistItem->product->category->slug.'/'.$wishlistItem->product->slug)}}">
                                                 <label class="product-name">
-                                                    <img src="{{$wishlistItem->product->productImages[0]->image}}" style="width: 50px; height: 50px"
+                                                    <img src="{{ asset($wishlistItem->product->productImages[0]->image)}}" style="width: 50px; height: 50px"
                                                          alt="{{$wishlistItem->product->name}}">
                                                     {{$wishlistItem->product->name}}
                                                 </label>
