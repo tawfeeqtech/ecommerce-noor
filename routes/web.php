@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\WishlistController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,7 @@ use App\Http\Livewire\Admin\Brand\Index;
 
 Route::controller(FrontendController::class)->group(function () {
     Route::get('/', 'index');
+    Route::get('/thanks', 'thanks')->name('thank-you');
     Route::prefix('collections')->group(function () {
         Route::get('/', 'categories')->name('collections');
         Route::get('/{category_slug}', 'products')->name('products');
@@ -47,6 +49,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('cart')->controller(CartController::class)->group(function () {
         Route::get('/', 'index')->name('cart');
+    });
+
+    Route::prefix('checkout')->controller(CheckoutController::class)->group(function () {
+        Route::get('/', 'index')->name('checkout');
     });
 });
 

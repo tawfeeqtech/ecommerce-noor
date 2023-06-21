@@ -15,6 +15,7 @@ class Order extends Model
         'fullname',
         'email',
         'phone',
+        'pin_code',
         'address',
         'status_message',
         'payment_mode',

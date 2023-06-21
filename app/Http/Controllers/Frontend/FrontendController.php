@@ -15,6 +15,11 @@ class FrontendController extends Controller
         return view('frontend.index', compact('sliders'));
     }
 
+    public function thanks()
+    {
+        return view('frontend.thank-you');
+    }
+
     public function categories()
     {
         $entities = Category::where('status', '0')->get();
