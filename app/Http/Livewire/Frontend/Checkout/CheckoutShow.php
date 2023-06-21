@@ -57,6 +57,19 @@ class CheckoutShow extends Component
                 'quantity'=> $cartItem->quantity,
                 'price' =>$cartItem->product->selling_price,
             ]);
+
+            if($cartItem->product_color_id == null && $cartItem->product_size_id == null ){
+                $cartItem->product()->where('id',$cartItem->product_id)->decrement('quantity',$cartItem->quantity);
+            }else{
+                if($cartItem->product_color_id != null){
+                    $cartItem->productColor()->where('id',$cartItem->product_color_id)->decrement('quantity',$cartItem->quantity);
+                }
+                if($cartItem->product_size_id != null){
+                    $cartItem->productSize()->where('id',$cartItem->product_size_id)->decrement('quantity',$cartItem->quantity);
+                }
+                $cartItem->product()->where('id',$cartItem->product_id)->decrement('quantity',$cartItem->quantity);
+            }
+
         }
 
         return $order;
@@ -69,7 +82,7 @@ class CheckoutShow extends Component
         $codOrder = $this->placeOrder();
         if($codOrder){
             Cart::where('user_id',$this->user->id)->delete();
-
+            session()->flash('message','Order Placed Successfully');
             $this->dispatchBrowserEvent('message', [
                 'message' => 'Order Placed Successfully',
                 'type' => 'success',
@@ -90,6 +103,7 @@ class CheckoutShow extends Component
 
     public function totalProductAmount()
     {
+        $this->totalProductAmount = 0;
         $this->carts = Cart::where('user_id', $this->user->id)->get();
         foreach ($this->carts as $cartItem) {
             $this->totalProductAmount += $cartItem->product->selling_price * $cartItem->quantity;
