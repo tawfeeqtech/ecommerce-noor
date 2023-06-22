@@ -7,12 +7,26 @@ use App\Models\Order;
 use App\Models\Orderitem;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
+
 
 class CheckoutShow extends Component
 {
     public $user, $carts, $totalProductAmount = 0;
 
     public $fullName, $email, $phone, $pinCode, $address, $payment_mode = null, $payment_id = null;
+
+    protected $listeners = [
+        'validationForAll',
+        'transactionEmit' => 'paidOnlineOrder'
+    ];
+
+    public function validationForAll()
+    {
+        $this->validate();
+    }
+
+
 
     public function mount()
     {
@@ -29,6 +43,33 @@ class CheckoutShow extends Component
             'address' => 'required|string|max:500',
         ];
     }
+
+    /*public function checkout()
+    {
+        $provider = new PayPalClient([]);
+        $token = $provider->getAccessToken();
+        $provider->setAccessToken($token);
+
+        $order = $provider->createOrder([
+            "intent" => "CAPTURE",
+            "purchase_units" => [
+                [
+                    "amount" => [
+                        "currency_code" => "USD",
+                        "value" => $this->totalProductAmount
+                    ]
+                ]
+            ],
+            "application_context" => [
+                "cancel_url" => route('payment.cancel'),
+                "return_url" => route('payment.success'),
+            ]
+        ]);
+
+        return redirect($order['links'][1]['href']);
+
+    }*/
+
 
     public function placeOrder()
     {
@@ -54,20 +95,20 @@ class CheckoutShow extends Component
                 'product_id' => $cartItem->product_id,
                 'product_color_id' => $cartItem->product_color_id,
                 'product_size_id' => $cartItem->product_size_id,
-                'quantity'=> $cartItem->quantity,
-                'price' =>$cartItem->product->selling_price,
+                'quantity' => $cartItem->quantity,
+                'price' => $cartItem->product->selling_price,
             ]);
 
-            if($cartItem->product_color_id == null && $cartItem->product_size_id == null ){
-                $cartItem->product()->where('id',$cartItem->product_id)->decrement('quantity',$cartItem->quantity);
-            }else{
-                if($cartItem->product_color_id != null){
-                    $cartItem->productColor()->where('id',$cartItem->product_color_id)->decrement('quantity',$cartItem->quantity);
+            if ($cartItem->product_color_id == null && $cartItem->product_size_id == null) {
+                $cartItem->product()->where('id', $cartItem->product_id)->decrement('quantity', $cartItem->quantity);
+            } else {
+                if ($cartItem->product_color_id != null) {
+                    $cartItem->productColor()->where('id', $cartItem->product_color_id)->decrement('quantity', $cartItem->quantity);
                 }
-                if($cartItem->product_size_id != null){
-                    $cartItem->productSize()->where('id',$cartItem->product_size_id)->decrement('quantity',$cartItem->quantity);
+                if ($cartItem->product_size_id != null) {
+                    $cartItem->productSize()->where('id', $cartItem->product_size_id)->decrement('quantity', $cartItem->quantity);
                 }
-                $cartItem->product()->where('id',$cartItem->product_id)->decrement('quantity',$cartItem->quantity);
+                $cartItem->product()->where('id', $cartItem->product_id)->decrement('quantity', $cartItem->quantity);
             }
 
         }
@@ -78,18 +119,30 @@ class CheckoutShow extends Component
     public function codOrder()
     {
         $this->payment_mode = 'Cash On Delivery';
+        $this->submitOrder();
+    }
 
+    public function paidOnlineOrder($value)
+    {
+        $this->payment_id = $value;
+        $this->payment_mode = 'paid by Paypal';
+
+        $this->submitOrder();
+    }
+
+    public function submitOrder()
+    {
         $codOrder = $this->placeOrder();
-        if($codOrder){
-            Cart::where('user_id',$this->user->id)->delete();
-            session()->flash('message','Order Placed Successfully');
+        if ($codOrder) {
+            Cart::where('user_id', $this->user->id)->delete();
+            session()->flash('message', 'Order Placed Successfully');
             $this->dispatchBrowserEvent('message', [
                 'message' => 'Order Placed Successfully',
                 'type' => 'success',
                 'status' => 200
             ]);
             return redirect()->route('thank-you');
-        }else{
+        } else {
             $this->dispatchBrowserEvent('message', [
                 'message' => 'Something went Wrong!',
                 'type' => 'error',
@@ -97,7 +150,6 @@ class CheckoutShow extends Component
             ]);
             return false;
         }
-
     }
 
 

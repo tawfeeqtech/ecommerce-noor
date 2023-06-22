@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
+use App\Http\Controllers\Frontend\OrderController;
 use App\Http\Controllers\Frontend\WishlistController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -54,6 +55,19 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('checkout')->controller(CheckoutController::class)->group(function () {
         Route::get('/', 'index')->name('checkout');
     });
+
+    Route::prefix('orders')->controller(OrderController::class)->group(function () {
+        Route::get('/', 'index')->name('orders.index');
+        Route::get('/{id}', 'show')->name('orders.show');
+    });
+
+    /*Route::get('/payment-cancel',function (){
+        dd('cancel');
+    })->name('payment.cancel');
+
+    Route::get('/payment-success',function (){
+        dd('success');
+    })->name('payment.success');*/
 });
 
 
