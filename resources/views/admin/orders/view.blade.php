@@ -3,6 +3,11 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 grid-margin">
+
+            @if(session('message'))
+                <div class="alert alert-success">{{session('message')}}</div>
+            @endif
+
             <div class="card">
                 <div class="card-header bg-transparent d-flex justify-content-between flex-wrap">
                     <div class="d-flex align-items-end">
@@ -97,6 +102,39 @@
                             </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border mt-3">
+                <div class="card-body">
+                    <h4>Order Process (Order Status Update)</h4>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <form action="{{route('admin.orders.updateOrderStatus',$order->id)}}" method="post">
+                                @csrf
+                                @method('PUT')
+                                <div class="input-group">
+                                    <select name="order_status" class="form-select">
+                                        <option value="">Select Status</option>
+                                        <option value="in progress" {{Request::get('status') == 'in progress' ? 'selected' : ''}}>In Progress</option>
+                                        <option value="completed" {{Request::get('status') == 'completed' ? 'selected' : ''}}>Completed</option>
+                                        <option value="pending" {{Request::get('status') == 'pending' ? 'selected' : ''}}>Pending</option>
+                                        <option value="cancelled" {{Request::get('status') == 'cancelled' ? 'selected' : ''}}>Cancelled</option>
+                                        <option value="out-for-delivery" {{Request::get('status') == 'out-for-delivery' ? 'selected' : ''}}>Out for delivery</option>
+
+                                    </select>
+                                    <button type="submit" class="btn btn-inverse-primary ">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-7">
+                            <br/>
+                            <h4 class="mt-3">Current Order Status:
+                                <span class="text-uppercase">{{$order->status_message}}</span>
+                            </h4>
+                        </div>
                     </div>
                 </div>
             </div>

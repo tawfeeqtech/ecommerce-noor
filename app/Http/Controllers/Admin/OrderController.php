@@ -9,10 +9,19 @@ use Illuminate\Support\Carbon;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $todayDate = Carbon::now(); //'2023-06-21';
-        $orders = Order::whereDate('created_at', $todayDate)->paginate(10);
+        $todayDate = Carbon::now()->format('Y-m-d'); //'2023-06-21';
+        //$orders = Order::whereDate('created_at', $todayDate)->paginate(10);
+
+        $orders = Order::when($request->date != null,function ($q) use ($request){
+            return $q->whereDate('created_at',$request->date);
+        },function ($q) use ($todayDate){
+            return $q->whereDate('created_at',$todayDate);
+        })->when($request->status != null, function ($q) use ($request){
+            return $q->where('status_message',$request->status);
+        })
+            ->paginate(10);
         return view('admin.orders.index', compact('orders'));
     }
 
@@ -22,7 +31,18 @@ class OrderController extends Controller
         if($order){
             return view('admin.orders.view',compact('order'));
         }else{
-            return redirect()->back()->with('message','No Order Found');
+            return to_route('admin.orders.index')->with('message','Order Id not found');
+        }
+    }
+
+    public function updateOrderStatus($order_id,Request $request)
+    {
+        $order = Order::where('id',$order_id)->first();
+        if($order){
+            $order->update(['status_message' =>$request->order_status]);
+            return to_route('admin.orders.show', ['order_id' => $order_id])->with('message','Order Status Updated');
+        }else{
+            return to_route('admin.orders.show', ['order_id' => $order_id])->with('message','No Order Found');
         }
     }
 }

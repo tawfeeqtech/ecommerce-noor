@@ -107,5 +107,6 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
     Route::prefix('orders')->controller(\App\Http\Controllers\Admin\OrderController::class)->group(function () {
         Route::get('/', 'index')->name('admin.orders.index');
         Route::get('/{order_id}', 'show')->name('admin.orders.show');
+        Route::put('/{order_id}', 'updateOrderStatus')->name('admin.orders.updateOrderStatus');
     });
 });
