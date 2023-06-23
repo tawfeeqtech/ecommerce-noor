@@ -20,6 +20,11 @@
     {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{{asset('assets/css/bootstrap.min.css')}}" rel="stylesheet">
+
+    <!-- OwlCarousel2 -->
+    <link href="{{asset('assets/css/owl.carousel.min.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/css/owl.theme.default.min.css')}}" rel="stylesheet">
+
     <link href="{{asset('assets/css/custom.css')}}" rel="stylesheet">
 
     <!-- CSS -->
@@ -107,12 +112,12 @@
             }
 
         })
-
-
-
     </script>
-    @livewireScripts
+    <script src="{{asset('assets/js/owl.carousel.min.js')}}"></script>
 
+    @yield('script')
+
+    @livewireScripts
     @stack('scripts')
 </body>
 </html>
