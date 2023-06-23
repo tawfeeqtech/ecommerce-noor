@@ -90,7 +90,7 @@
                         <a class="nav-link" href="{{ route('collections') }}">All Categories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">New Arrivals</a>
+                        <a class="nav-link" href="{{ route('new-arrivals') }}">New Arrivals</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Featured Products</a>
