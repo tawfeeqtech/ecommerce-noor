@@ -223,9 +223,19 @@
                                         <div class="form-group">
                                             <div class="form-check form-check-flat form-check-primary">
                                                 <label class="form-check-label">
-                                                    <input name="trending" type="checkbox" class="form-check-input" {{
-                                                    $entity->trending == '1' ? 'checked' : '' }}>
+                                                    <input name="trending" type="checkbox" class="form-check-input" {{$entity->trending == '1' ? 'checked' : '' }}>
                                                     trending
+                                                    <i class="input-helper"></i></label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="form-check form-check-flat form-check-primary">
+                                                <label class="form-check-label">
+                                                    <input name="featured" type="checkbox" class="form-check-input" {{$entity->featured == '1' ? 'checked' : '' }}>
+                                                    Featured
                                                     <i class="input-helper"></i></label>
                                             </div>
                                         </div>

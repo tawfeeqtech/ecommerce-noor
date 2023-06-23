@@ -158,8 +158,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane border p-3 fade" id="details" role="tabpanel"
-                            aria-labelledby="details-tab">
+                        <div class="tab-pane border p-3 fade" id="details" role="tabpanel" aria-labelledby="details-tab">
                             <div class="row py-2">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -200,6 +199,16 @@
                                             <label class="form-check-label">
                                                 <input name="trending" type="checkbox" class="form-check-input">
                                                 trending
+                                                <i class="input-helper"></i></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="form-check form-check-flat form-check-primary">
+                                            <label class="form-check-label">
+                                                <input name="featured" type="checkbox" class="form-check-input">
+                                                Featured
                                                 <i class="input-helper"></i></label>
                                         </div>
                                     </div>

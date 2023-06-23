@@ -41,10 +41,9 @@ Route::controller(FrontendController::class)->group(function () {
         Route::get('/{category_slug}/{product_slug}', 'productView')->name('productView');
     });
 
-    Route::prefix('arrivals')->group(function () {
-        Route::get('/', 'newArrivals')->name('new-arrivals');
+    Route::get('/arrivals', 'newArrivals')->name('new-arrivals');
+    Route::get('/featured-products', 'featuredProducts')->name('featured-products');
 
-    });
 });
 
 Route::middleware(['auth'])->group(function () {
