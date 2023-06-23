@@ -18,7 +18,15 @@
                 <div class="card-body">
                     <h4 class="text-primary">
                         <i class="fa fa-shopping-cart text-dark"></i> My Order Details
-                        <a href="{{route('admin.orders.index')}}" class="btn btn-inverse-danger btn-sm float-end">Back</a>
+                        <a href="{{route('admin.orders.index')}}" class="btn btn-inverse-danger btn-sm float-end">
+                            Back
+                        </a>
+                        <a href="{{route('admin.invoice.download',$order->id)}}" class="btn btn-inverse-primary btn-sm float-end mx-1">
+                            Download Invoice
+                        </a>
+                        <a href="{{route('admin.invoice.view',$order->id)}}" target="_blank" class="btn btn-inverse-warning btn-sm float-end">
+                            View Invoice
+                        </a>
                     </h4>
                     <hr>
                     <div class="row">
