@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Livewire\Admin\Brand\Index;
@@ -84,6 +85,11 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::prefix('settings')->controller(SettingController::class)->group(function () {
+        Route::get('/', 'index')->name('admin.settings');
+        Route::post('/', 'store')->name('admin.settings');
+    });
 
     Route::resource('category', CategoryController::class);
 
