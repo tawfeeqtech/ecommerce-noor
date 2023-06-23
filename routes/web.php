@@ -102,4 +102,10 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
     Route::get('/brand', Index::class)->name('brand.index');
     // Route::get('/category', [CategoryController::class, 'index'])->name('category');
     // Route::get('/category/create', [CategoryController::class, 'create'])->name('create-category');
+
+
+    Route::prefix('orders')->controller(\App\Http\Controllers\Admin\OrderController::class)->group(function () {
+        Route::get('/', 'index')->name('admin.orders.index');
+        Route::get('/{order_id}', 'show')->name('admin.orders.show');
+    });
 });

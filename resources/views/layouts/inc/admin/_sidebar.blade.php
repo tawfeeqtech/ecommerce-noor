@@ -7,7 +7,16 @@
       </a>
     </li>
 
-    <li class="nav-item {{ request()->routeIs('category.*') ? 'active' : ''  }}">
+
+      <li class="nav-item {{ request()->routeIs('admin.orders.index') ? 'active' : ''  }}">
+          <a class="nav-link" href="{{ route('admin.orders.index') }}">
+              <i class="mdi mdi-chart-pie menu-icon"></i>
+              <span class="menu-title">Orders</span>
+          </a>
+      </li>
+
+
+      <li class="nav-item {{ request()->routeIs('category.*') ? 'active' : ''  }}">
       <a class="nav-link {{ request()->routeIs('category.*') ? '' : 'collapsed'  }} " data-bs-toggle="collapse" href="#category" aria-expanded="false" aria-controls="category">
         <i class="mdi mdi-circle-outline menu-icon"></i>
         <span class="menu-title">Category</span>
