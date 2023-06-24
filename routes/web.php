@@ -46,6 +46,7 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/arrivals', 'newArrivals')->name('new-arrivals');
     Route::get('/featured-products', 'featuredProducts')->name('featured-products');
 
+    Route::get('/search', 'searchProducts');
 });
 
 Route::middleware(['auth'])->group(function () {

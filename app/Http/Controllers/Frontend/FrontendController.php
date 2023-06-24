@@ -20,6 +20,17 @@ class FrontendController extends Controller
         return view('frontend.index', compact('sliders','trendingProducts','newArrivalsProducts','featuredProducts'));
     }
 
+    public function searchProducts(Request $request)
+    {
+        if($request->search){
+            $searchProducts = Product::where('name','LIKE','%'.$request->search.'%')
+                ->latest()->paginate(1);
+            return view('frontend.pages.search',compact('searchProducts'));
+        }else{
+            return redirect()->back()->with('message','Empty Search');
+        }
+    }
+
     public function newArrivals()
     {
         $newArrivalsProducts = Product::latest()->take(16)->get();
@@ -56,6 +67,7 @@ class FrontendController extends Controller
             return redirect()->back();
         }
     }
+
     public function productView($category_slug,$product_slug = null)
     {
         $category = Category::where('slug',$category_slug)->first();
@@ -74,5 +86,4 @@ class FrontendController extends Controller
             return redirect()->back();
         }
     }
-
 }
