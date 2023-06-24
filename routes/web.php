@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\OrderController;
@@ -15,7 +15,8 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SliderController;
-use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Livewire\Admin\Brand\Index;
 
 /*
@@ -126,4 +127,7 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
             Route::get('/{order_id}/generate', 'generateInvoice')->name('admin.invoice.download');
         });
     });
+
+    Route::resource('users', UserController::class);
+
 });
