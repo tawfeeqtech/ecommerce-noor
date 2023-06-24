@@ -47,7 +47,24 @@
                                 <i class="fa fa-user"></i> {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ route('dashboard') }}"><i class="fa fa-user"></i> Dashboard</a></li>
+                                @if(Auth::user()->role_as == '1'){
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                        <i class="fa fa-user"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('profile.index') }}">
+                                        <i class="fa fa-user"></i> Profile
+                                    </a>
+                                </li>
+                                @else
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('profile.index') }}">
+                                            <i class="fa fa-user"></i> Profile
+                                        </a>
+                                    </li>
+                                @endif
                                 <li><a class="dropdown-item" href="{{ route('orders.index') }}"><i class="fa fa-list"></i> My Orders</a></li>
                                 <li><a class="dropdown-item" href="{{ route('wishlist') }}"><i class="fa fa-heart"></i> My Wishlist</a></li>
                                 <li><a class="dropdown-item" href="{{ route('cart') }}"><i class="fa fa-shopping-cart"></i> My Cart</a>

@@ -18,7 +18,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         if(!Auth::user()->role_as == '1'){
-            return redirect('/home')->with('status','Access Denied.');
+            return redirect('/')->with('status','Access Denied.');
         }
         return $next($request);
     }

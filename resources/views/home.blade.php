@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title',{{ config('app.name', 'Laravel') }})
+@section('title','test')
 
 @section('content')
 <div class="container">

@@ -68,6 +68,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}', 'show')->name('orders.show');
     });
 
+
+//    Route::resource('profile', \App\Http\Controllers\Frontend\UserController::class);
+
+    Route::prefix('profile')->controller(\App\Http\Controllers\Frontend\UserController::class)->group(function () {
+        Route::get('/', 'index')->name('profile.index');
+        Route::post('/', 'updateUserDetails')->name('profile.update');
+    });
+
+
     /*Route::get('/payment-cancel',function (){
         dd('cancel');
     })->name('payment.cancel');
@@ -82,7 +91,7 @@ Route::middleware(['auth'])->group(function () {
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+//Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
