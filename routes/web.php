@@ -74,6 +74,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('profile')->controller(\App\Http\Controllers\Frontend\UserController::class)->group(function () {
         Route::get('/', 'index')->name('profile.index');
         Route::post('/', 'updateUserDetails')->name('profile.update');
+        Route::get('/change-password', 'createPassword')->name('profile.create-password');
+        Route::post('/change-password', 'changePassword')->name('profile.change-password');
     });
 
 
