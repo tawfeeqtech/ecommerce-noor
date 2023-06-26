@@ -19,11 +19,11 @@ class ProfileController extends Controller
 
         $profile_data =[
           'name' =>  $user->name,
-          'address' =>  $user->address,
-          'phone' =>  $user->phone,
+            'phone' =>  $user->phone,
+            'address' =>  $user->userDetail->address,
         ];
-        if(isset($user->img) && $user->img != null){
-            $profile_data["photo"] =  $user->img;
+        if(isset($user->userDetail->img) && $user->userDetail->img != null){
+            $profile_data["photo"] =  $user->userDetail->img;
         }
         return $this->apiResponse($profile_data, "بيانات الملف الشخصي", 200);
     }
@@ -33,12 +33,6 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
-        /*$validator = $request->validate([
-            'name' => 'sometimes|required',
-            'phone' => 'sometimes|required|unique:users,phone,' . $user->id,
-            'photo' => 'image|mimes:jpeg,png,jpg|max:2048',
-
-        ]);*/
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|required',
             'address' => 'sometimes|required',
@@ -49,21 +43,31 @@ class ProfileController extends Controller
         if ($validator->fails()) {
             return $this->apiResponse($validator->errors(),'errors', 422);
         }
-
-        $validated = $validator->validated();
+        $validated = $validator->safe()->except(['address', 'photo']);
+        $validatedDetailData = $validator->safe()->only(['address']);
         if ($request->hasFile('photo')) {
             $uploadPath = 'uploads/profile_pictures/';
 
-            $validated['img'] = $this->uploadImage($uploadPath,$request);
+            $validatedDetailData['img'] = $this->uploadImage($uploadPath,$request);
 
             // Delete the old profile picture if exists
-            $imagePath = $user->img;
+            $imagePath = $user->userDetail->img;
             if (File::exists($imagePath)) {
                 File::delete($imagePath);
             }
         }
-        if($validated){
+        if($validated ){
             $user->update($validated);
+            $user->userDetail()->updateOrCreate(
+                [
+                    'user_id' => $user->id
+                ],
+                [
+                    'pin_code'=>'pin_code',
+                    'address'=> isset($validatedDetailData['address']) ? $validatedDetailData['address']: $user->userDetail->address,
+                    'img'=>$validatedDetailData['img'],
+                ]
+            );
             return $this->apiResponse([], 'updated successfully', 200);
         }
         return $this->apiResponse([],'errors', 400);

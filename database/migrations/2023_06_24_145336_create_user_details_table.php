@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('user_details', function (Blueprint $table) {
             $table->id();
-            $table->string('phone')->nullable()->unique();
             $table->string('pin_code')->nullable();
             $table->string('address',500)->nullable();
             $table->string('img')->nullable()->default(null);

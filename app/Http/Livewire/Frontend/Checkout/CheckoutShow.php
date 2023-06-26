@@ -178,10 +178,12 @@ class CheckoutShow extends Component
     {
         $this->fullName = $this->user->name;
         $this->email = $this->user->email;
+        $this->phone = $this->user->phone;
 
-        $this->phone = $this->user->userDetail->phone;
-        $this->pinCode = $this->user->userDetail->pin_code;
-        $this->address = $this->user->userDetail->address;
+        if ($this->user->userDetail){
+            $this->pinCode = $this->user->userDetail->pin_code;
+            $this->address = $this->user->userDetail->address;
+        }
 
 
         $this->totalProductAmount = $this->totalProductAmount();

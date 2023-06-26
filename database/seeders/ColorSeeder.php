@@ -26,6 +26,5 @@ class ColorSeeder extends Seeder
             ['name'=>'beige','code'=>'#b69578'],
         ];
         Color::insert($createMultipleColor);
-        //User::create($arr);
     }
 }

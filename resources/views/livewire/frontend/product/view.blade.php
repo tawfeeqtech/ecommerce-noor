@@ -42,8 +42,8 @@
                             Home / <a href="{{route('products',$product->category->slug)}}">{{$product->category->name}}</a> / {{$product->name}}
                         </p>
                         <div>
-                            <span class="selling-price">{{$product->selling_price}}</span>
-                            <span class="original-price">{{$product->original_price}}</span>
+                            <span class="selling-price">${{$product->selling_price}}</span>
+                            <span class="original-price">${{$product->original_price}}</span>
                         </div>
                         <div class="mt-2">
                             @if($product->productColors->count() > 0)

@@ -15,13 +15,12 @@ class SizeSeeder extends Seeder
     public function run()
     {
         $createMultipleSize = [
-            ['name'=>'38','code'=>'38'],
-            ['name'=>'40','code'=>'40'],
-            ['name'=>'42','code'=>'42'],
-            ['name'=>'44','code'=>'44'],
-            ['name'=>'46','code'=>'46'],
+            ['name'=>'xs','code'=>'xs'],
+            ['name'=>'s','code'=>'s'],
+            ['name'=>'m','code'=>'m'],
+            ['name'=>'l','code'=>'l'],
+            ['name'=>'xl','code'=>'xl'],
         ];
         Size::insert($createMultipleSize);
-        //User::create($arr);
     }
 }

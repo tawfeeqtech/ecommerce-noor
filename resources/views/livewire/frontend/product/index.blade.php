@@ -57,8 +57,8 @@
                                 </a>
                             </h5>
                             <div>
-                                <span class="selling-price">{{$item->selling_price}}</span>
-                                <span class="original-price">{{$item->original_price}}</span>
+                                <span class="selling-price">${{$item->selling_price}}</span>
+                                <span class="original-price">${{$item->original_price}}</span>
                             </div>
                             {{-- <div class="mt-2">
                                 <a href="" class="btn btn1">Add To Cart</a>

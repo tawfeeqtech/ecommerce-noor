@@ -26,7 +26,8 @@ class UserController extends Controller
 
         $user = User::findOrFail(Auth::user()->id);
         $user->update([
-            'name' => $validated['username']
+            'name' => $validated['username'],
+            'phone'=>$validated['phone']
         ]);
 
         $user->userDetail()->updateOrCreate(
@@ -34,7 +35,6 @@ class UserController extends Controller
                 'user_id' => $user->id
             ],
             [
-                'phone'=>$validated['phone'],
                 'pin_code'=>$validated['pin_code'],
                 'address'=>$validated['address'],
             ]

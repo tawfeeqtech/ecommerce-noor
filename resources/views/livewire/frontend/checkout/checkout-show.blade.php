@@ -23,6 +23,7 @@
                     <div class="shadow bg-white p-3">
                         <h4 class="text-primary">
                             Basic Information
+                            <a href="{{route('profile.index')}}" class="btn btn-info float-end text-white">Update your personal information</a>
                         </h4>
                         <hr>
 
@@ -144,7 +145,7 @@
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
-                            "value": '0.1'//"{{$this->totalProductAmount}}"
+                            "value": "{{$this->totalProductAmount}}" //
                         }
                     }]
                 });

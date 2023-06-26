@@ -49,7 +49,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::prefix('profile')->controller(ProfileController::class)->group(function () {
         Route::get('/', 'show');
-        Route::put('update', [ProfileController::class, 'update']);
+        Route::post('update', [ProfileController::class, 'update']);
         Route::get('logout', 'logout');
     });
 

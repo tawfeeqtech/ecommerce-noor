@@ -17,8 +17,6 @@ class UserSeeder extends Seeder
         $arr = [
             'name' => 'admin',
             'email' => 'admin@gmail.com',
-            'address' => 'home',
-            'phone' => '0000',
             'password' => bcrypt('123456'),
             'role_as' => 1,
         ];

@@ -61,7 +61,7 @@
                     <h4>Trending Products</h4>
                     <div class="underline mb-4"></div>
                 </div>
-                @if($trendingProducts)
+                @if($trendingProducts->first() != null)
                     <div class="col-md-12">
                         <div class="owl-carousel owl-theme four-carousel">
                         @foreach($trendingProducts as $item)
@@ -108,11 +108,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <h4>New Arrivals
+                        @if($newArrivalsProducts->first() != null)
                         <a href="{{route('new-arrivals')}}" class="btn btn-warning float-end">View More</a>
+                            @endif
                     </h4>
                     <div class="underline mb-4"></div>
                 </div>
-                @if($newArrivalsProducts)
+                @if($newArrivalsProducts->first() != null)
                     <div class="col-md-12">
                         <div class="owl-carousel owl-theme four-carousel">
                             @foreach($newArrivalsProducts as $item)
@@ -159,11 +161,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <h4>Featured Products
+                        @if($featuredProducts->first() != null)
                         <a href="{{route('featured-products')}}" class="btn btn-warning float-end">View More</a>
+                        @endif
                     </h4>
                     <div class="underline mb-4"></div>
                 </div>
-                @if($featuredProducts)
+                @if($featuredProducts->first() != null)
                     <div class="col-md-12">
                         <div class="owl-carousel owl-theme four-carousel">
                             @foreach($featuredProducts as $item)

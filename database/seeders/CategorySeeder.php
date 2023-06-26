@@ -26,6 +26,5 @@ class CategorySeeder extends Seeder
             ['name'=>'Skirts','slug'=>'Skirts']
         ];
         Category::insert($createMultipleCategories);
-        //User::create($arr);
     }
 }
