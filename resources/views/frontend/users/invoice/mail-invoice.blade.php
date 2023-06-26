@@ -80,6 +80,13 @@
 </head>
 <body>
 
+<div class="text-center">
+    <h2>Thank you for your order</h2>
+    <p>
+        Thank you  for purchasing with {{$appSetting->website_name ?: 'e-commerce'}}
+    </p>
+</div>
+
 <table class="order-details">
     <thead>
     <tr>

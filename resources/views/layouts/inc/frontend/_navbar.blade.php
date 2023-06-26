@@ -47,7 +47,7 @@
                                 <i class="fa fa-user"></i> {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @if(Auth::user()->role_as == '1'){
+                                @if(Auth::user()->role_as == '1')
                                 <li>
                                     <a class="dropdown-item" href="{{ route('dashboard') }}">
                                         <i class="fa fa-user"></i> Dashboard
