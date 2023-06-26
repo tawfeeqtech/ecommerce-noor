@@ -27,6 +27,10 @@
                         <a href="{{route('admin.invoice.view',$order->id)}}" target="_blank" class="btn btn-inverse-warning btn-sm float-end">
                             View Invoice
                         </a>
+
+                        <a href="{{route('admin.invoice.send-mail',$order->id)}}" class="btn btn-inverse-info btn-sm float-end mx-1">
+                            Send Mail
+                        </a>
                     </h4>
                     <hr>
                     <div class="row">

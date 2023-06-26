@@ -15,5 +15,6 @@ class UserDetail extends Model
         'pin_code',
         'address',
         'user_id',
+        'img',
     ];
 }

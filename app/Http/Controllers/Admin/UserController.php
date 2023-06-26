@@ -41,9 +41,6 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role_as' => $validated['role_as'],
-            'address' => '',
-            'phone' => null,
-            'img' => null,
         ]);
 
         return to_route('users.index')->with('message','User Created Successfully');
@@ -62,19 +59,15 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6'],
             'role_as' => ['required', 'integer'],
         ]);
 
         User::findOrFail($user_id)->update([
             'name' => $validated['name'],
-            'email' => $validated['email'],
+            'email' => $request->email,
             'password' => Hash::make($validated['password']),
             'role_as' => $validated['role_as'],
-            'address' => '',
-            'phone' => null,
-            'img' => null,
         ]);
 
         return to_route('users.index')->with('message','User Update Successfully');
